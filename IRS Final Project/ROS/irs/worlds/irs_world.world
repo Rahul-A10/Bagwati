@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.6">
+    <world name="irs_world_01">
+    <!-- A gazebo links attacher -->
+    <plugin name="ros_link_attacher_plugin" filename="libgazebo_ros_link_attacher.so"/>
+
+    <gravity>0 0 -9.8</gravity>
+    <physics default="0" name="default_physics" type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+
+    <!-- <include>
+      <uri>model://bf3000</uri>
+      <pose>0 0 0 0 0 0</pose>
+    </include> -->
+    <include>
+      <uri>model://ground_plane</uri>
+      <emission>
+        <color>1 1 1 1</color>
+      </emission>
+      <ambient>
+        <color>0.5882353 0.5882353 0.5882353 1</color>
+      </ambient>
+      <diffuse>
+        <texture texture="Shelves_png-sampler" texcoord="CHANNEL1"/>
+      </diffuse>
+      <specular>
+        <color>1 1 1 1</color>
+      </specular>
+      <shininess>
+        <float>9.999999</float>
+      </shininess>
+      <reflective>
+        <color>1 1 1 1</color>
+      </reflective>
+      <transparent opaque="A_ONE">
+        <color>1 1 1 1</color>
+      </transparent>
+      <transparency>
+        <float>1</float>
+      </transparency>
+    </include>
+
+    <!-- Global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <include>
+      <uri>model://conveyor</uri>
+      <name>c1</name>
+      <pose>-1.8 4.5 0 0 0 -1.571</pose>
+    </include>
+
+    <include>
+      <uri>model://conveyor</uri>
+      <name>c2</name>
+      <pose>12 10 0 0 0 -1.571</pose>
+    </include>
+
+    <include>
+        <uri>model://bin_1_</uri>
+        <name>b1</name>
+        <pose>2 3 0 0 0 0</pose>
+        <static>true</static>
+    </include>
+
+    <include>
+        <uri>model://bin_1_</uri>
+        <name>b2</name>
+        <pose>6 3 0 0 0 0</pose>
+        <static>true</static>
+    </include>
+
+    <include>
+        <uri>model://bin_1_</uri>
+        <name>b3</name>
+        <pose>10 3 0 0 0 0</pose>
+        <static>true</static>
+    </include>
+
+    <include>
+        <uri>model://bin_1_</uri>
+        <name>b4</name>
+        <pose>2 6 0 0 0 0</pose>
+        <static>true</static>
+    </include>
+
+    <include>
+        <uri>model://bin_1_</uri>
+        <name>b5</name>
+        <pose>6 6 0 0 0 0</pose>
+        <static>true</static>
+    </include>
+
+    <include>
+        <uri>model://bin_1_</uri>
+        <name>b6</name>
+        <pose>10 6 0 0 0 0</pose>
+        <static>true</static>
+    </include>
+    </world>
+</sdf>
