@@ -1,0 +1,163 @@
+<?xml version="1.01"?>
+<robot name="module1" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!--  required acro reference for xml parsing -->
+
+
+    <!-- xacro properties -->
+    <!-- <xacro:property name="pi" value="3.1415" /> -->
+    <xacro:macro name="default_inertial" params="mass">
+        <inertial>
+          <mass value="${mass}" />
+          <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyx="0.0" iyy="1.0" iyz="0.0" izx="0.0" izy="0.0" izz="1.0" />
+        </inertial>
+    </xacro:macro>
+
+
+    <!-- material tag references are for color -->
+    <material name="blue">
+        <color rgba="0 0 0.7 1"/>
+    </material>
+
+    <material name="black">
+        <color rgba="0 0 0 1"/>
+    </material>
+
+    <material name="red">
+        <color rgba="0.7 0 0 1"/>
+    </material>
+    
+    <!-- the robot links -->
+    <link name="dummy"></link>
+    <joint name="dummy_joint" type="fixed">
+        <parent link="dummy"/>
+        <child link="base_link"/>
+    </joint>
+
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="0.5 0.5 0.25"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0.3"/>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.5 0.5 0.25"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0.3"/>
+        </collision>
+        <inertial>
+          <mass value="10" />
+          <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyx="0.0" iyy="1.0" iyz="0.0" izx="0.0" izy="0.0" izz="1.0" />
+        </inertial>
+    </link>
+
+    <!-- left wheel -->
+    <link name="left_wheel">
+        <visual>
+            <geometry>
+                <cylinder length="0.2" radius=".125"/>
+            </geometry>
+            <origin rpy="1.57075 0 0" xyz="0 -0.1 0"/> <!-- write the coordinates wrt to the frame, defined in the joint tag-->
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder length="0.2" radius=".125"/>
+            </geometry>
+            <origin rpy="1.57075 0 0" xyz="0 -0.1 0"/>
+        </collision>
+        <inertial>
+          <mass value="2" />
+          <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyx="0.0" iyy="1.0" iyz="0.0" izx="0.0" izy="0.0" izz="1.0" />
+        </inertial>
+    </link>
+
+    <!-- the left wheel joint -->
+
+    <joint name="base_left_wheel" type="continuous">
+        <parent link="base_link"/>
+        <child link="left_wheel"/>
+        <axis xyz ="0 1 0"/>
+        <limit effort="100" lower="0.0" upper="1.0" velocity="0.5"/>
+        <origin xyz="0 -0.25 .25"/>
+    </joint>
+
+    <!-- the gazebo reference for left wheel -->
+
+    <gazebo reference="left_wheel">
+        <mu1 value="200.0"/>
+        <mu2 value="100.0"/>
+        <kp value="10000000.0" />
+        <kd value="1.0" />
+        <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <!-- right wheel -->
+
+    <link name="right_wheel">
+        <visual>
+            <geometry>
+                <cylinder length="0.2" radius="0.125"/>
+            </geometry>
+            <origin rpy="1.57075 0 0" xyz="0 0.1 0"/>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder length="0.2" radius="0.125"/>
+            </geometry>
+            <origin rpy="1.57075 0 0" xyz="0 0.1 0"/>
+        </collision>
+        <inertial>
+          <mass value="2" />
+          <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyx="0.0" iyy="1.0" iyz="0.0" izx="0.0" izy="0.0" izz="1.0" />
+        </inertial>
+    </link>
+
+    <!-- the right wheel joint-->
+    
+    <joint name="base_right_wheel" type="continuous">
+        <parent link="base_link"/>
+        <child link="right_wheel"/>
+        <axis xyz ="0 1 0"/>
+        <limit effort="100" lower="0.0" upper="1.0" velocity="0.5"/>
+        <origin xyz="0 0.25 .25"/>
+    </joint>
+
+    <!-- gazebo reference for right wheel  -->
+    
+    <gazebo reference="right_wheel">
+        <mu1 value="200.0"/>
+        <mu2 value="100.0"/>
+        <kp value="10000000.0" />
+        <kd value="1.0" />
+        <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <!-- transmission and plugins, used for linking ros and gazebo -->
+    <transmission name="left_wheel_rotate">
+        <type>transmission_interface/SimpleTransmission</type>
+        <actuator name="left_wheel_motor">
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+        <joint name="base_left_wheel">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </joint>
+    </transmission>
+
+    <transmission name="right_wheel_rotate">
+        <type>transmission_interface/SimpleTransmission</type>
+        <actuator name="right_wheel_motor">
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+        <joint name="base_right_wheel">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        </joint>
+    </transmission>
+
+    <!-- the gazebo ros dynamic link, required for simulations for runnnign ros programs in gazebo -->
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+          <robotNamespace>/</robotNamespace>
+        </plugin>
+    </gazebo>
+</robot>
